@@ -3,6 +3,7 @@ import numpy as np
 import torch
 from unet_model import unet_model
 import random
+import base64
 
 input_shape = (256, 256)
 model = unet_model(n_channels=3, n_classes=1)
@@ -28,26 +29,48 @@ def predict_masks(image):
     mask = mask.squeeze()
     return mask
 
-
 def remove_background(image, mask):
     mask = cv2.resize(mask, (image.shape[1], image.shape[0]))
-    mask = np.expand_dims(mask, axis=-1)
     mask = (mask > 0.5).astype(np.uint8)
-    result = image * mask
-    return result
+
+    image_rgba = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)
+    image_rgba[:, :, 3] = mask * 255  # Set alpha channel based on mask
+
+    blurred_mask = cv2.GaussianBlur(mask.astype(np.float32), (0, 0), sigmaX=3, sigmaY=3, borderType=cv2.BORDER_DEFAULT)
+    blurred_mask = blurred_mask / 255.0
+    
+    result_image = np.empty_like(image_rgba, dtype=np.uint8)
+    for i in range(3):
+        result_image[:, :, i] = (image[:, :, i] * blurred_mask).astype(np.uint8)
+    result_image[:, :, 3] = mask * 255
+    
+    return image_rgba
+
+def image_to_base64(image):
+    _, buffer = cv2.imencode('.png', image)
+    image_base64 = base64.b64encode(buffer).decode('utf-8')
+    return image_base64
 
 
-number = random.randint(0, 690)
+def result(image):
+    predicted_mask = predict_masks(image)
+    result_image = remove_background(image, predicted_mask)
+    result_image_base64 = image_to_base64(result_image)
+    return result_image_base64
 
-test_image_path = f'testing_images/image_{number}.jpg'
-test_image = cv2.imread(test_image_path)
+# Uncomment this and run it if you want to test it here with a random image from the testing_images folder
 
-predicted_mask = predict_masks(test_image)
+# number = random.randint(0, 690)
 
-result_image = remove_background(test_image, predicted_mask)
+# test_image_path = f'testing_images/image_{number}.jpg'
+# test_image = cv2.imread(test_image_path)
 
-cv2.imshow('Original Image', test_image)
-cv2.imshow('Predicted Mask', predicted_mask)
-cv2.imshow('Result Image', result_image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# predicted_mask = predict_masks(test_image)
+
+# result_image = remove_background(test_image, predicted_mask)
+
+# cv2.imshow('Original Image', test_image)
+# cv2.imshow('Predicted Mask', predicted_mask)
+# cv2.imshow('Result Image', result_image)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
