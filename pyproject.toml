@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "dpns-project"
+version = "0.1.0"
+description = "Backgorund Subtraction"
+authors = ["aesbube <ljubicad11@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.10.13"
+numpy = "^1.26.4"
+opencv-python = "^4.10.0.82"
+torch = "^2.3.1"
+scikit-learn = "^1.5.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
