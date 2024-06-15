@@ -15,6 +15,6 @@ To install all dependencies, simply run the commands:
 ## Starting the unet-demo
 To start the web app demo follow these steps:
 - In terminal type `cd unet-demo` and run the command `npm install axios`.
-- Run the command `npm start`
-- To start the server, go to the project root by typing the command `cd ..` and run the command `uvicorn main:app --reload`
-- If it doesn't open, go to the [link](http://localhost:3000) and you can use the demo
+- Run the command `npm start`.
+- To start the server, go to the project root by typing the command `cd ..` and run the command `uvicorn main:app --reload`.
+- If it doesn't open, go to the [link](http://localhost:3000) and you can use the demo.
