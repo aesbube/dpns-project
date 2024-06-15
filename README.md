@@ -1,4 +1,4 @@
-# Backgound Subtraction 
+# Background Subtraction 
 This project uses the [DAVIS-dataset](https://graphics.ethz.ch/Downloads/Data/Davis/DAVIS-data.zip). After downloading the dataset, unzip it, and put the `Annotations` and `JPEGImages` folders in project and only use the 480p folders. Because the models are trained with a small database, the results may vary, so if you want better results you can use a larger database, but make sure to make a new trainval.txt file with keys and values according to your database.
 
 ## Install dependencies
