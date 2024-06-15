@@ -18,13 +18,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
             <input type="file" accept="image/*" onChange={handleImageUpload} style={styles.input} />
         </div>
     );
-
-
 };
 
 const styles = {
     input: {
-        margin: '20px 0',
+        margin: '20px',
     }
 };
 

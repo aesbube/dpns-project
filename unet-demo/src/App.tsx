@@ -12,12 +12,16 @@ const App: React.FC = () => {
   const styles = {
     app: {
       textAlign: 'center' as TextAlign,
-      margin: '20px',
+      paddingTop: '20px',
+      width: '100%',
+      height: '100vh',
+      backgroundColor: '#252526',
     },
     button: {
       marginTop: '10px',
       padding: '10px 20px',
-      backgroundColor: '#4CAF50',
+      borderRadius: '20px',
+      backgroundColor: '#3e3e42',
       color: 'white',
       border: 'none',
       cursor: 'pointer',
