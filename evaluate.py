@@ -13,6 +13,7 @@ model.eval()
 
 
 def preprocess_image(image, input_shape):
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = cv2.resize(image, input_shape)
     image = image / 255.0
     image = np.transpose(image, (2, 0, 1))
@@ -33,17 +34,11 @@ def remove_background(image, mask):
     mask = cv2.resize(mask, (image.shape[1], image.shape[0]))
     mask = (mask > 0.5).astype(np.uint8)
 
-    image_rgba = cv2.cvtColor(image, cv2.COLOR_RGB2RGBA)
-    image_rgba[:, :, 3] = mask * 255  # Set alpha channel based on mask
+    image_rgba = cv2.cvtColor(image, cv2.COLOR_BGR2RGBA)
+    blurred_mask = cv2.GaussianBlur(mask.astype(np.float32), (0, 0), sigmaX=5, sigmaY=5, borderType=cv2.BORDER_DEFAULT)
+    alpha_channel = (blurred_mask * 255).astype(np.uint8)
+    image_rgba[:, :, 3] = alpha_channel  
 
-    blurred_mask = cv2.GaussianBlur(mask.astype(np.float32), (0, 0), sigmaX=3, sigmaY=3, borderType=cv2.BORDER_DEFAULT)
-    blurred_mask = blurred_mask / 255.0
-    
-    result_image = np.empty_like(image_rgba, dtype=np.uint8)
-    for i in range(3):
-        result_image[:, :, i] = (image[:, :, i] * blurred_mask).astype(np.uint8)
-    result_image[:, :, 3] = mask * 255
-    
     return image_rgba
 
 def image_to_base64(image):
