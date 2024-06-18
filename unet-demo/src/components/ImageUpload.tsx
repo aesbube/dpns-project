@@ -23,6 +23,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload }) => {
 const styles = {
     input: {
         margin: '20px',
+        color: '#e8e6e3',
     }
 };
 

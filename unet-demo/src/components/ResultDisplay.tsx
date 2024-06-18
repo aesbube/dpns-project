@@ -10,7 +10,7 @@ const ResultDisplay: React.FC<ResultDisplayProps> = ({ resultImage }) => {
             margin: '20px',
             maxWidth: '100%',
             height: 'auto',
-            border: '2px solid black',
+            border: '2px solid #8c8273',
         }
     };
     

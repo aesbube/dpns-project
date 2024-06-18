@@ -10,22 +10,25 @@ const App: React.FC = () => {
   const [selected_image, setSelectedImage] = useState<File | null>(null);
 
   const styles = {
+    title: {
+      color: '#e8e6e3',
+    },
     app: {
       textAlign: 'center' as TextAlign,
       paddingTop: '20px',
       width: '100%',
       height: '100vh',
-      backgroundColor: '#252526',
+      backgroundColor: '#1c1f20',
     },
     button: {
       marginTop: '10px',
       padding: '10px 20px',
       borderRadius: '20px',
-      backgroundColor: '#3e3e42',
-      color: 'white',
+      backgroundColor: '#303436',
+      color: '#e8e6d8',
       border: 'none',
       cursor: 'pointer',
-
+      marginBottom: `20px`,
     },
     buttonHover: {
       backgroundColor: '#45a049',
@@ -73,7 +76,7 @@ const App: React.FC = () => {
 
   return (
     <div style={styles.app}>
-      <h1>U-Net Model Demo</h1>
+      <h1 style={styles.title}>U-Net Model Demo</h1>
       <ImageUpload onImageUpload={handleImageSelect} />
       <button onClick={handleSubmit} style={styles.button}>Submit</button>
       {result_image && <ResultDisplay resultImage={result_image} />}
