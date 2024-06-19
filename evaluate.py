@@ -30,16 +30,31 @@ def predict_masks(image):
     mask = mask.squeeze()
     return mask
 
+
+def remove_background_local(image, mask):
+    mask = cv2.resize(mask, (image.shape[1], image.shape[0]))
+    mask = (mask > 0.5).astype(np.uint8)
+
+    blurred_mask = cv2.GaussianBlur(mask.astype(
+        np.float32), (0, 0), sigmaX=5, sigmaY=5, borderType=cv2.BORDER_DEFAULT)
+    blurred_mask = (blurred_mask > 0.5).astype(np.uint8)
+    blurred_mask = np.expand_dims(blurred_mask, axis=-1)
+    result = image * blurred_mask
+    return result
+
+
 def remove_background(image, mask):
     mask = cv2.resize(mask, (image.shape[1], image.shape[0]))
     mask = (mask > 0.5).astype(np.uint8)
 
     image_rgba = cv2.cvtColor(image, cv2.COLOR_BGR2RGBA)
-    blurred_mask = cv2.GaussianBlur(mask.astype(np.float32), (0, 0), sigmaX=5, sigmaY=5, borderType=cv2.BORDER_DEFAULT)
+    blurred_mask = cv2.GaussianBlur(mask.astype(
+        np.float32), (0, 0), sigmaX=5, sigmaY=5, borderType=cv2.BORDER_DEFAULT)
     alpha_channel = (blurred_mask * 255).astype(np.uint8)
-    image_rgba[:, :, 3] = alpha_channel  
+    image_rgba[:, :, 3] = alpha_channel
 
     return image_rgba
+
 
 def image_to_base64(image):
     _, buffer = cv2.imencode('.png', image)
@@ -53,8 +68,8 @@ def result(image):
     result_image_base64 = image_to_base64(result_image)
     return result_image_base64
 
-# Uncomment this and run it if you want to test it here with a random image from the testing_images folder
 
+# Uncomment this and run it if you want to test it here with a random image from the testing_images folder
 # number = random.randint(0, 690)
 
 # test_image_path = f'testing_images/image_{number}.jpg'
@@ -62,7 +77,7 @@ def result(image):
 
 # predicted_mask = predict_masks(test_image)
 
-# result_image = remove_background(test_image, predicted_mask)
+# result_image = remove_background_local(test_image, predicted_mask)
 
 # cv2.imshow('Original Image', test_image)
 # cv2.imshow('Predicted Mask', predicted_mask)
