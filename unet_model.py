@@ -20,7 +20,7 @@ class unet_model(nn.Module):
         self.up3 = Up(256, 128 // factor, bilinear)
         self.up4 = Up(128, 64, bilinear)
         self.outc = OutConv(64, n_classes)
-        self.sigmoid = nn.Sigmoid()  # Define the sigmoid layer
+        self.sigmoid = nn.Sigmoid()  
 
     def forward(self, x):
         x1 = self.inc(x)
@@ -33,7 +33,7 @@ class unet_model(nn.Module):
         x = self.up3(x, x2)
         x = self.up4(x, x1)
         logits = self.outc(x)
-        return self.sigmoid(logits)  # Apply sigmoid to the output
+        return self.sigmoid(logits)  
 
     def use_checkpointing(self):
         self.inc = torch.utils.checkpoint(self.inc)
@@ -47,8 +47,6 @@ class unet_model(nn.Module):
         self.up4 = torch.utils.checkpoint(self.up4)
         self.outc = torch.utils.checkpoint(self.outc)
 
-# Create the model instance
 model = unet_model(n_channels=3, n_classes=1)
 
-# Print model summary
 print(model)
